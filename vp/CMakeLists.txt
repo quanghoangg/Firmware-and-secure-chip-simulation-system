@@ -6,7 +6,7 @@ if(EXISTS "$ENV{VERILATOR_ROOT}/share/verilator/verilator-config.cmake")
 endif()
 find_package(verilator CONFIG REQUIRED HINTS ENV VERILATOR_ROOT)
 
-foreach(name IN ITEMS ROM_BASE ROM_SIZE SRAM_BASE SRAM_SIZE UART0_BASE UART0_SIZE)
+foreach(name IN ITEMS ROM_BASE ROM_SIZE SRAM_BASE SRAM_SIZE UART0_BASE UART0_SIZE AES_BASE AES_SIZE)
   math(EXPR HONHON_${name}_DEC "${HONHON_${name}}")
 endforeach()
 configure_file(../hw/rtl/honhon_soc_pkg.sv.in honhon_soc_pkg.sv @ONLY)
@@ -24,6 +24,7 @@ verilate(honhon-vp
   TOP_MODULE vp_top
   SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/rtl/opentitan.vlt"
+    "${HONHON_OPENTITAN_DIR}/hw/ip/aes/lint/aes.vlt"
     ${OPENTITAN_RTL_PACKAGES}
     "${CMAKE_CURRENT_BINARY_DIR}/honhon_soc_pkg.sv"
     "${CMAKE_CURRENT_SOURCE_DIR}/../hw/rtl/honhon_bus.sv"

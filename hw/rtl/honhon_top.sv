@@ -10,8 +10,8 @@ module honhon_top (
   import prim_mubi_pkg::*;
   import tlul_pkg::*;
 
-  tl_h2d_t host_request [2], device_request [3];
-  tl_d2h_t host_response [2], device_response [3];
+  tl_h2d_t host_request [2], device_request [NumDevices];
+  tl_d2h_t host_response [2], device_response [NumDevices];
 
   logic [1:0] cpu_req, cpu_gnt, cpu_valid, cpu_err, tl_integrity_error;
   logic [31:0] cpu_addr [2], cpu_wdata [2], cpu_rdata [2];
@@ -141,5 +141,23 @@ module honhon_top (
     .intr_tx_watermark_o(), .intr_tx_empty_o(), .intr_tx_done_o(),
     .intr_rx_watermark_o(), .intr_rx_overflow_o(), .intr_rx_frame_err_o(),
     .intr_rx_break_err_o(), .intr_rx_timeout_o(), .intr_rx_parity_err_o()
+  );
+
+  edn_pkg::edn_req_t aes_entropy_req;
+  edn_pkg::edn_rsp_t aes_entropy_rsp;
+
+  // The VP provides deterministic, non-FIPS test data in place of an EDN.
+  assign aes_entropy_rsp = '{edn_ack: aes_entropy_req.edn_req,
+                             edn_fips: 1'b0, edn_bus: 32'h12345678};
+
+  aes #(.AlertAsyncOn('0)) u_aes (
+    .clk_i, .rst_ni, .rst_shadowed_ni(rst_ni),
+    .idle_o(), .output_valid_o(), .input_ready_o(),
+    .lc_escalate_en_i(lc_ctrl_pkg::Off),
+    .clk_edn_i(clk_i), .rst_edn_ni(rst_ni),
+    .edn_o(aes_entropy_req), .edn_i(aes_entropy_rsp),
+    .keymgr_key_i(keymgr_dpe_pkg::HW_KEY_REQ_DEFAULT),
+    .tl_i(device_request[3]), .tl_o(device_response[3]),
+    .alert_rx_i({aes_reg_pkg::NumAlerts{prim_alert_pkg::ALERT_RX_DEFAULT}}), .alert_tx_o()
   );
 endmodule

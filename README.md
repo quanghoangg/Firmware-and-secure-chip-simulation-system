@@ -63,6 +63,42 @@ ctest --test-dir build --output-on-failure
 
 Bài kiểm tra chờ lời chào trong log, mở PTY, gửi dữ liệu nhị phân và kiểm tra byte trả về ở cả PTY lẫn log.
 
+## AES trên VP
+
+AES của OpenTitan nối vào bus TL-UL tại `0x40001000–0x400010ff`. Firmware lấy địa chỉ cơ sở từ `HONHON_AES_BASE` trong `honhon.h`. Header `hw/top/aes_regs.h` cung cấp offset và các trường bit của thanh ghi. Dùng truy cập MMIO 32 bit.
+
+| Thanh ghi | Offset từ `HONHON_AES_BASE` |
+| --- | --- |
+| `ALERT_TEST` | `0x00` |
+| `KEY_SHARE0_0` đến `KEY_SHARE0_7` | `0x04`–`0x20` |
+| `KEY_SHARE1_0` đến `KEY_SHARE1_7` | `0x24`–`0x40` |
+| `IV_0` đến `IV_3` | `0x44`–`0x50` |
+| `DATA_IN_0` đến `DATA_IN_3` | `0x54`–`0x60` |
+| `DATA_OUT_0` đến `DATA_OUT_3` | `0x64`–`0x70` |
+| `CTRL_SHADOWED` | `0x74` |
+| `CTRL_AUX_SHADOWED` | `0x78` |
+| `CTRL_AUX_REGWEN` | `0x7c` |
+| `TRIGGER` | `0x80` |
+| `STATUS` | `0x84` |
+| `CTRL_GCM_SHADOWED` | `0x88` |
+
+Ví dụ đọc trạng thái trong firmware:
+
+```c
+#include "honhon.h"
+#include "hw/top/aes_regs.h"
+#include "sw/device/lib/base/mmio.h"
+
+static uint32_t aes_status(void) {
+  return mmio_region_read32(mmio_region_from_addr(HONHON_AES_BASE),
+                            AES_STATUS_REG_OFFSET);
+}
+```
+
+Chờ `STATUS.IDLE` trước khi cấu hình và ghi cùng một giá trị hai lần vào `CTRL_SHADOWED`. Ghi đủ tám word cho mỗi nhóm `KEY_SHARE0` và `KEY_SHARE1`. XOR hai nhóm cho ra khóa. Chờ `STATUS.INPUT_READY` rồi ghi bốn word dữ liệu vào theo thứ tự little-endian. Ở chế độ tự động, AES bắt đầu sau khi nhận đủ bốn word. Chờ `STATUS.OUTPUT_VALID` trước khi đọc cả bốn word kết quả.
+
+VP cấp dữ liệu entropy cố định để mô phỏng. Khóa được nạp qua MMIO, còn giao diện nạp khóa từ key manager được để ở trạng thái không có khóa hợp lệ.
+
 ## Mã nguồn và môi trường
 
 - `hw/` ghép các IP OpenTitan và định nghĩa bản đồ địa chỉ dùng chung.

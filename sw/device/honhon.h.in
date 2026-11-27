@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 #define HONHON_UART0_BASE ((uintptr_t)@HONHON_UART0_BASE@u)
+#define HONHON_AES_BASE ((uintptr_t)@HONHON_AES_BASE@u)
+#define HONHON_AES_SIZE @HONHON_AES_SIZE@u
 #define HONHON_CLOCK_HZ @HONHON_CLOCK_HZ@u
 #define HONHON_UART_BAUD @HONHON_UART_BAUD@u
 

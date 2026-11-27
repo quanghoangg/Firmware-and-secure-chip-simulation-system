@@ -5,6 +5,9 @@ package honhon_soc_pkg;
   localparam int unsigned SramSize = @HONHON_SRAM_SIZE_DEC@;
   localparam int unsigned Uart0Base = @HONHON_UART0_BASE_DEC@;
   localparam int unsigned Uart0Size = @HONHON_UART0_SIZE_DEC@;
+  localparam int unsigned AesBase = @HONHON_AES_BASE_DEC@;
+  localparam int unsigned AesSize = @HONHON_AES_SIZE_DEC@;
+  localparam int unsigned NumDevices = 4;
   localparam int unsigned ClockHz = @HONHON_CLOCK_HZ@;
   localparam int unsigned UartBaud = @HONHON_UART_BAUD@;
 endpackage
