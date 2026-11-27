@@ -1,0 +1,10 @@
+package honhon_soc_pkg;
+  localparam int unsigned RomBase = @HONHON_ROM_BASE_DEC@;
+  localparam int unsigned RomSize = @HONHON_ROM_SIZE_DEC@;
+  localparam int unsigned SramBase = @HONHON_SRAM_BASE_DEC@;
+  localparam int unsigned SramSize = @HONHON_SRAM_SIZE_DEC@;
+  localparam int unsigned Uart0Base = @HONHON_UART0_BASE_DEC@;
+  localparam int unsigned Uart0Size = @HONHON_UART0_SIZE_DEC@;
+  localparam int unsigned ClockHz = @HONHON_CLOCK_HZ@;
+  localparam int unsigned UartBaud = @HONHON_UART_BAUD@;
+endpackage

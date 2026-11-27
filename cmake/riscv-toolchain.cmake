@@ -1,0 +1,11 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR riscv32)
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES RISCV_TOOLCHAIN_ROOT)
+
+set(_riscv_bin "${RISCV_TOOLCHAIN_ROOT}/bin")
+set(CMAKE_C_COMPILER "${_riscv_bin}/riscv32-unknown-elf-clang")
+set(CMAKE_ASM_COMPILER "${CMAKE_C_COMPILER}")
+set(CMAKE_C_COMPILER_TARGET riscv32-unknown-elf)
+set(CMAKE_ASM_COMPILER_TARGET riscv32-unknown-elf)
+set(CMAKE_OBJCOPY "${_riscv_bin}/riscv32-unknown-elf-objcopy")

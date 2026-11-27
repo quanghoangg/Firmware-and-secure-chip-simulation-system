@@ -1,0 +1,13 @@
+#ifndef HONHON_DEVICE_H_
+#define HONHON_DEVICE_H_
+
+#include <stdint.h>
+
+#define HONHON_UART0_BASE ((uintptr_t)@HONHON_UART0_BASE@u)
+#define HONHON_CLOCK_HZ @HONHON_CLOCK_HZ@u
+#define HONHON_UART_BAUD @HONHON_UART_BAUD@u
+
+extern uint32_t SystemCoreClock;
+void SystemInit(void);
+
+#endif

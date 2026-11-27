@@ -1,0 +1,11 @@
+`verilator_config
+
+// Warnings emitted by the reused OpenTitan RTL under Verilator 5.048.
+lint_off -rule WIDTHEXPAND -file "*/tlul/rtl/tlul_fifo_sync.sv"
+lint_off -rule WIDTHEXPAND -file "*/uart/rtl/uart_core.sv"
+lint_off -rule WIDTHEXPAND -file "*/uartdpi/uartdpi.sv"
+lint_off -rule WIDTHTRUNC -file "*/uartdpi/uartdpi.sv"
+lint_off -rule ALWCOMBORDER -file "*/prim/rtl/prim_leading_one_ppc.sv"
+lint_off -rule UNOPTFLAT -file "*/lowrisc_ibex/rtl/ibex_id_stage.sv"
+lint_off -rule UNOPTFLAT -file "*/lowrisc_ibex/rtl/ibex_controller.sv"
+lint_off -rule UNOPTFLAT -file "*/lowrisc_ibex/rtl/ibex_core.sv"
