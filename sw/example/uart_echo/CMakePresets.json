@@ -1,31 +1,4 @@
 {
   "version": 6,
-  "configurePresets": [
-    {
-      "name": "ninja",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build"
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "build",
-      "configurePreset": "ninja"
-    }
-  ],
-  "workflowPresets": [
-    {
-      "name": "build",
-      "steps": [
-        {
-          "type": "configure",
-          "name": "ninja"
-        },
-        {
-          "type": "build",
-          "name": "build"
-        }
-      ]
-    }
-  ]
+  "include": ["../CMakePresets.json"]
 }

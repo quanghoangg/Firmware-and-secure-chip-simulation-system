@@ -35,6 +35,24 @@ tail -F build/uart0.log
 
 Dừng VP bằng Ctrl+C ở terminal chạy mô phỏng. Dùng `honhon-vp --help` để xem tùy chọn đường dẫn ROM, log và giới hạn chu kỳ. VP mặc định nạp `build/sw/uart_echo.vmem`.
 
+## Terminal UART
+
+Từ thư mục gốc của repo, build và chạy example `uart_terminal`:
+
+```sh
+cd sw/example/uart_terminal
+cmake --workflow --preset build
+cmake --build build --target run_vp
+```
+
+Mở terminal thứ hai, thay `N` bằng số PTY VP in ra và kết nối bằng pySerial:
+
+```sh
+python3 -m serial.tools.miniterm /dev/pts/N 115200 --raw
+```
+
+Tại dấu nhắc `honhon>`, gõ `help`, `echo Xin chao`, `clear` hoặc `info` rồi nhấn Enter. Dùng Backspace để sửa dòng và `Ctrl+]` để thoát `miniterm`. Firmware và log UART nằm trong `sw/example/uart_terminal/build/`.
+
 ## Kiểm tra
 
 Từ thư mục example, chạy:
