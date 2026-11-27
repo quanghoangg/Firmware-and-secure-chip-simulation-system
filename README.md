@@ -4,7 +4,7 @@ honhon là SoC RV32 tối giản với Ibex, TL-UL, ROM, SRAM và nguyên IP UAR
 
 ## Build và chạy
 
-Repo chứa các nguồn OpenTitan cần để build firmware và VP trong `third_party/opentitan/`. Trên Linux, chuẩn bị CMake 3.25 trở lên, Ninja, Python 3, trình biên dịch C++17, Verilator và LLVM hỗ trợ RISC-V (`clang`, `ld.lld`, `llvm-objcopy`). VP đã được kiểm tra với Verilator 5.048.
+Repo chứa các nguồn OpenTitan cần để build firmware và VP trong `third_party/opentitan/`. Trên Linux, chuẩn bị CMake 3.25 trở lên, Ninja, Python 3, trình biên dịch C++17, Verilator, LLVM hỗ trợ RISC-V (`clang`, `ld.lld`) và `llvm-objcopy` hoặc GNU `objcopy` từ binutils. VP đã được kiểm tra với Verilator 5.048.
 
 Khi các công cụ có trên `PATH`, vào example từ thư mục repo và build bằng một lệnh.
 

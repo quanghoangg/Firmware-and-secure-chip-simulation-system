@@ -45,7 +45,7 @@ set(bin_to_vmem "${CMAKE_CURRENT_SOURCE_DIR}/bin_to_vmem.py")
 add_custom_command(
   OUTPUT "${rom}"
   BYPRODUCTS "${binary}"
-  COMMAND "${CMAKE_OBJCOPY}" -O binary "$<TARGET_FILE:${firmware_target}>" "${binary}"
+  COMMAND ${HONHON_OBJCOPY_COMMAND} -O binary "$<TARGET_FILE:${firmware_target}>" "${binary}"
   COMMAND "${HONHON_PYTHON}" "${bin_to_vmem}" "${binary}" "${rom}"
   DEPENDS ${firmware_target} "${bin_to_vmem}"
   COMMENT "Creating the honhon UART example ROM image"
