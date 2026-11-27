@@ -1,3 +1,11 @@
+if(POLICY CMP0144)
+  cmake_policy(SET CMP0144 NEW)
+endif()
+if(EXISTS "$ENV{VERILATOR_ROOT}/share/verilator/verilator-config.cmake")
+  set(ENV{VERILATOR_ROOT} "$ENV{VERILATOR_ROOT}/share/verilator")
+endif()
+find_package(verilator CONFIG REQUIRED HINTS ENV VERILATOR_ROOT)
+
 foreach(name IN ITEMS ROM_BASE ROM_SIZE SRAM_BASE SRAM_SIZE UART0_BASE UART0_SIZE)
   math(EXPR HONHON_${name}_DEC "${HONHON_${name}}")
 endforeach()
@@ -20,7 +28,7 @@ verilate(honhon-vp
     "${CMAKE_CURRENT_BINARY_DIR}/honhon_soc_pkg.sv"
     "${CMAKE_CURRENT_SOURCE_DIR}/../hw/rtl/honhon_bus.sv"
     "${CMAKE_CURRENT_SOURCE_DIR}/../hw/rtl/honhon_top.sv"
-    "${OPENTITAN_ROOT}/hw/dv/dpi/uartdpi/uartdpi.sv"
+    "${HONHON_OPENTITAN_DIR}/hw/dv/dpi/uartdpi/uartdpi.sv"
     "${CMAKE_CURRENT_SOURCE_DIR}/rtl/vp_top.sv"
   VERILATOR_ARGS
     ${OPENTITAN_RTL_ARGS}

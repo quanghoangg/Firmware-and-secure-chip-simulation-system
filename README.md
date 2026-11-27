@@ -4,7 +4,9 @@ honhon là SoC RV32 tối giản với Ibex, TL-UL, ROM, SRAM và nguyên IP UAR
 
 ## Build và chạy
 
-Từ thư mục `honhon/`, vào example và dùng workflow preset để cấu hình và build bằng một lệnh. Workflow cần CMake 3.25 trở lên.
+Repo chứa các nguồn OpenTitan cần để build firmware và VP trong `third_party/opentitan/`. Trên Linux, chuẩn bị CMake 3.25 trở lên, Ninja, Python 3, trình biên dịch C++17, Verilator và LLVM hỗ trợ RISC-V (`clang`, `ld.lld`, `llvm-objcopy`). VP đã được kiểm tra với Verilator 5.048.
+
+Khi các công cụ có trên `PATH`, vào example từ thư mục repo và build bằng một lệnh.
 
 ```sh
 cd sw/example/uart_echo
@@ -48,6 +50,13 @@ Bài kiểm tra chờ lời chào trong log, mở PTY, gửi dữ liệu nhị p
 - `hw/` ghép các IP OpenTitan và định nghĩa bản đồ địa chỉ dùng chung.
 - `sw/device/` chứa startup, linker script và cấu hình chip. `sw/drivers/hal/` cung cấp UART HAL trên `dif_uart`. `sw/example/uart_echo/` chứa firmware mẫu.
 - `vp/` chạy clock/reset, nạp ROM và dùng mô hình nối tiếp `uartdpi.sv` của OpenTitan với PTY Linux và tệp log. Khi hàng đợi PTY đầy, log vẫn nhận toàn bộ đầu ra UART.
-- `cmake/` chọn mã IP, Verilator và toolchain RV32. Cấu hình mặc định tìm checkout tại `../secure_chip/opentitan`, công cụ tại `../secure_chip/tools` và lowRISC LLVM trong cache của checkout.
+- `third_party/opentitan/` chứa RTL, UART DPI, UART DIF và định nghĩa thanh ghi đã sinh. Xem phiên bản nguồn và giấy phép trong [README của phần OpenTitan](third_party/opentitan/README.md).
+- `cmake/` cấu hình VP và LLVM cho firmware RV32. `sw/bin_to_vmem.py` chuyển firmware nhị phân thành ảnh ROM.
 
-Có thể đổi các đường dẫn bằng `-DOPENTITAN_ROOT=...`, `-DOPENTITAN_TOOLS=...`, `-Dverilator_DIR=...`, `-DSRECORD_ROOT=...` và `-DRISCV_TOOLCHAIN_ROOT=...`. Cần Python với các thư viện dành cho `regtool.py` và `autogen_dif.py`; trên workspace này CMake dùng được thư viện Python đã tải trong cache OpenTitan. CMake dùng trực tiếp thư mục runtime của Verilator và thêm đường dẫn thư viện SRecord khi chuyển ảnh ROM.
+Khi công cụ nằm ở thư mục riêng, thêm các thư mục `bin/` vào `PATH` trước khi chạy workflow. Bạn cũng có thể lưu đường dẫn công cụ vào cấu hình CMake của example.
+
+```sh
+cmake --preset ninja \
+  -Dverilator_DIR=/path/to/verilator/share/verilator \
+  -DRISCV_TOOLCHAIN_ROOT=/path/to/llvm
+```
